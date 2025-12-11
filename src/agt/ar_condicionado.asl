@@ -16,23 +16,24 @@ temperatura_de_preferencia(jonas,25).
 
 +alterado : temperatura_ambiente(TA) & temperatura_ac(TAC)
   <-  .drop_intention(climatizar);
-        .print("Houve interação com o ar condicionado!");
+        .print("Houve interacao com o ar condicionado!");
         .print("Temperatura Ambiente: ", TA);
        .print("Temperatura Desejada: ", TAC);
         !!climatizar.
       
 +closed  <-  .print("Close event from GUIInterface").
    
- +!definir_temperatura: temperatura_ambiente(TA) & temperatura_ac(TAC) 
-             & temperatura_de_preferencia(User,TP) & TP \== TD & ligado(false)
-     <-  definir_temperatura(TP);
-         .print("Definindo temperatura baseado na preferência do usuário ", User);
-         .print("Temperatura: ", TP).
-     
- +!definir_temperatura: temperatura_ambiente(TA) & temperatura_ac(TAC) & ligado(false)
-     <-  .print("Usando última temperatura");
-         .print("Temperatura: ", TAC).
-         
+/* Planos para definir temperatura */
+
+// Plano para quando recebemos uma temperatura específica (ex: !definir_temperatura(25))
++!definir_temperatura(Temp)
+    <-  definir_temperatura(Temp); // Chama a operação do Java
+        .print("Temperatura do AC ajustada para ", Temp).
+
+// Plano de fallback caso chamem sem argumentos (usa a preferência)
++!definir_temperatura
+    :   temperatura_de_preferencia(User, TP) 
+    <-  !definir_temperatura(TP). // Redireciona para o plano acima         
          
  +!climatizar: temperatura_ambiente(TA) & temperatura_ac(TAC) & TA \== TAC & ligado(false)
      <-   ligar;
@@ -54,7 +55,7 @@ temperatura_de_preferencia(jonas,25).
          .print("Temperatura Desejada: ", TAC).
 
  +!climatizar 
-     <- 	.print("Não foram implementadas outras opções.");
+     <- 	.print("Nao foram implementadas outras opcoes.");
          .print("Temperatura regulada.").
 
 
@@ -76,4 +77,4 @@ temperatura_de_preferencia(jonas,25).
 +!modo_seguranca
     <-  ligar;
         definir_temperatura(10); // Congelar o intruso!
-        .print("MODO SEGURANÇA: Temperatura ajustada para 10 graus!").
+        .print("MODO SEGURANCA: Temperatura ajustada para 10 graus!").

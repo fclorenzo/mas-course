@@ -12,10 +12,10 @@
 +closed  <-  .print("Close event from GUIInterface").
    
  +!verificar_lampada: ligada(false)  
-     <-  .print("Alguém DESLIGOU a Lâmpada").
+     <-  .print("Alguem DESLIGOU a Lâmpada").
      
  +!verificar_lampada: ligada(true)  
-     <-  .print("Alguém LIGOU a Lâmpada").
+     <-  .print("Alguem LIGOU a Lâmpada").
      
  +!ligar_lampada
      <-  ligar;
@@ -34,4 +34,4 @@
 // Cenário 3: Intruso (Apagar luzes para dificultar)
 +!modo_seguranca
     <-  desligar;
-        .print("MODO SEGURANÇA: Luzes apagadas!").
+        .print("MODO SEGURANCA: Luzes apagadas!").

@@ -9,18 +9,18 @@
 +movimento_macaneta <- !verificar_fechada.
 
 +!verificar_fechada: trancada(true) 
-  <-  .print("Alguém mexeu na MAÇANETA, porém a porta está trancada!").
+  <-  .print("Alguem mexeu na MACANETA, porem a porta está trancada!").
 +!verificar_fechada: fechada(true)
-  <-  .print("Alguém mexeu na MAÇANETA e FECHOU a porta!").
+  <-  .print("Alguem mexeu na MACANETA e FECHOU a porta!").
 +!verificar_fechada: fechada(false)
-  <-  .print("Alguém mexeu na MAÇANETA e ABRIU a porta!").
+  <-  .print("Alguem mexeu na MACANETA e ABRIU a porta!").
   
 +movimento_fechadura <- !verificar_trancada.
 
 +!verificar_trancada: trancada(true)
-  <-  .print("Alguém mexeu na FECHADURA e TRANCOU a porta!").
+  <-  .print("Alguem mexeu na FECHADURA e TRANCOU a porta!").
 +!verificar_trancada: trancada(false)
-  <-  .print("Alguém mexeu na FECHADURA e DESTRANCOU a porta!").
+  <-  .print("Alguem mexeu na FECHADURA e DESTRANCOU a porta!").
       
 +closed  <-  .print("Close event from GUIInterface").
    
