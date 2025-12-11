@@ -17,28 +17,27 @@ import cartago.OPERATION;
 import cartago.tools.GUIArtifact;
 
 public class ArCondicionado extends GUIArtifact {
-    
+
     private InterfaceAC frame;
     private TemperaturaAmbienteSimulator TA;
     private AC ac_model = new AC(false, 25, 25);
-    
+
     public void setup() {
         defineObsProperty("ligado", ac_model.isOn());
         defineObsProperty("temperatura_ambiente", ac_model.getTemperatura_ambiente());
         defineObsProperty("temperatura_ac", ac_model.getTemperatura());
         System.out.println("Inicializado com " + ac_model.getTemperatura());
-        
+
         create_frame();
     }
-    
+
     void create_frame() {
         frame = new InterfaceAC();
-        linkActionEventToOp(frame.okButton,"ok");
+        linkActionEventToOp(frame.okButton, "ok");
         linkWindowClosingEventToOp(frame, "closed");
-        frame.setVisible(true);		
+        frame.setVisible(true);
     }
-    
-    
+
     @OPERATION
     void ligar() {
         this.ac_model.setOn(true);
@@ -46,26 +45,25 @@ public class ArCondicionado extends GUIArtifact {
         this.TA = new TemperaturaAmbienteSimulator();
         TA.start();
     }
-    
-@OPERATION
-void desligar() {
-    this.ac_model.setOn(false);
-    getObsProperty("ligado").updateValue(ac_model.isOn());
-    
-    if (TA != null) {
-        TA.stopThread();
-    }
-}
 
+    @OPERATION
+    void desligar() {
+        this.ac_model.setOn(false);
+        getObsProperty("ligado").updateValue(ac_model.isOn());
+
+        if (TA != null) {
+            TA.stopThread();
+        }
+    }
 
     @OPERATION
     void definir_temperatura(int temperatura) {
         ac_model.setTemperatura(temperatura);
         getObsProperty("temperatura_ac").updateValue(ac_model.getTemperatura());
     }
-    
-    @INTERNAL_OPERATION 
-    void ok(ActionEvent ev){
+
+    @INTERNAL_OPERATION
+    void ok(ActionEvent ev) {
         ac_model.setTemperatura(Integer.parseInt(frame.getTemperaturaD()));
         ac_model.setTemperatura_ambiente(Integer.parseInt(frame.getTemperaturaA()));
         getObsProperty("temperatura_ac").updateValue(ac_model.getTemperatura());
@@ -73,28 +71,32 @@ void desligar() {
         signal("alterado");
     }
 
-    @INTERNAL_OPERATION 
-    void closed(WindowEvent ev){
+    @INTERNAL_OPERATION
+    void closed(WindowEvent ev) {
         signal("closed");
     }
-    
-    @OPERATION 
-    void update(){
-        getObsProperty("temperatura_ambiente").updateValue(ac_model.getTemperatura_ambiente());
+
+    @OPERATION
+    void update() {
+        int tempAtual = ac_model.getTemperatura_ambiente();
+        getObsProperty("temperatura_ambiente").updateValue(tempAtual);
+        if (frame != null) {
+            frame.setTempAtual(tempAtual);
+        }
         // commit();
         // System.out.println("temperatura ==>> " + ac_model.getTemperatura_ambiente());
     }
-    
-    void atualiza_artefato(){
+
+    void atualiza_artefato() {
         execInternalOp("update");
     }
-    
+
     class AC {
-        
+
         private boolean isOn = false;
         private int temperatura_ambiente = 0;
         private int temperatura = 0;
-        
+
         public AC(boolean isOn, int temperatura_ambiente, int temperatura_desejavel) {
             super();
             this.isOn = isOn;
@@ -124,12 +126,12 @@ void desligar() {
 
         public void setTemperatura(int temperatura_desejavel) {
             this.temperatura = temperatura_desejavel;
-        }	
-            
+        }
+
     }
 
     class TemperaturaAmbienteSimulator extends Thread {
-        
+
         private boolean running;
 
         public TemperaturaAmbienteSimulator() {
@@ -145,14 +147,14 @@ void desligar() {
             while (running) {
                 System.out.println("Temperatura ambiente: " + ac_model.getTemperatura_ambiente());
                 try {
-                    Thread.sleep(5000); 
+                    Thread.sleep(5000);
                     int currentTemp = ac_model.getTemperatura_ambiente();
-                    if (currentTemp > ac_model.getTemperatura()) { 
-                        ac_model.setTemperatura_ambiente(currentTemp - 1); 
+                    if (currentTemp > ac_model.getTemperatura()) {
+                        ac_model.setTemperatura_ambiente(currentTemp - 1);
                         atualiza_artefato();
                     }
-                    if (currentTemp < ac_model.getTemperatura()) { 
-                        ac_model.setTemperatura_ambiente(currentTemp + 1); 
+                    if (currentTemp < ac_model.getTemperatura()) {
+                        ac_model.setTemperatura_ambiente(currentTemp + 1);
                         atualiza_artefato();
                     }
                 } catch (InterruptedException e) {
@@ -162,60 +164,56 @@ void desligar() {
         }
     }
 
-    class InterfaceAC extends JFrame {	
-        
+    class InterfaceAC extends JFrame {
+
         private JButton okButton;
         private JTextField temperaturaA;
         private JTextField temperaturaD;
-        
-        public InterfaceAC(){
+
+        public InterfaceAC() {
             setTitle(" Ar Condicionado ");
-            setSize(200,300);
-                        
+            setSize(200, 300);
+
             JPanel panel = new JPanel();
             JLabel tempA = new JLabel();
             tempA.setText("Temperatura Atual:    ");
             JLabel tempD = new JLabel();
             tempD.setText("Temperatura Desejada: ");
             setContentPane(panel);
-            
+
             okButton = new JButton("ok");
-            okButton.setSize(80,50);
-            
+            okButton.setSize(80, 50);
+
             temperaturaA = new JTextField(10);
             temperaturaA.setText("25");
             temperaturaA.setEditable(true);
-            
+
             temperaturaD = new JTextField(10);
             temperaturaD.setText("25");
             temperaturaD.setEditable(true);
-            
+
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
             panel.add(tempA);
             panel.add(temperaturaA);
             panel.add(tempD);
             panel.add(temperaturaD);
             panel.add(okButton);
-            
+
         }
-        
-        public String getTemperaturaA(){
+
+        public String getTemperaturaA() {
             return temperaturaA.getText();
         }
-        
-        public String getTemperaturaD(){
+
+        public String getTemperaturaD() {
             return temperaturaD.getText();
+        }
+
+        // Método Setter para atualizar a GUI
+        public void setTempAtual(int t) {
+            if (temperaturaA != null) {
+                temperaturaA.setText(String.valueOf(t));
+            }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
