@@ -76,5 +76,5 @@ temperatura_de_preferencia(jonas,25).
 // Cenário 3: Modo Pânico (Intruso)
 +!modo_seguranca
     <-  ligar;
-        definir_temperatura(10); // Congelar o intruso!
-        .print("MODO SEGURANCA: Temperatura ajustada para 10 graus!").
+        definir_temperatura(0); // Congelar o intruso!
+        .print("MODO SEGURANCA: Temperatura ajustada para 0 graus!").
