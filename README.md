@@ -11,7 +11,7 @@ O objetivo é demonstrar a coordenação entre diferentes agentes autônomos que
 O sistema é composto pelos seguintes agentes (localizados em `src/agt/`):
 
 1. **`camera`**: O "cérebro" da percepção. Monitora o ambiente através da GUI, identifica pessoas e locais, e coordena os demais agentes enviando comandos.
-2. **`ar_condicionado`**: Controla a temperatura ambiente. Possui preferências de usuário (20°C para o proprietário) e modos de ação extremos para segurança.
+2. **`ar_condicionado`**: Controla a temperatura ambiente. Possui preferências de usuário (25°C para o proprietário) e modos de ação extremos para segurança.
 3. **`lampada`**: Controla a iluminação artificial (Ligar/Desligar).
 4. **`cortina`**: Controla a iluminação natural e privacidade (Abrir/Fechar).
 5. **`fechadura`**: Controla o acesso físico à residência (Trancar/Destrancar/Abrir).
@@ -37,9 +37,9 @@ Quando o proprietário chega em casa, o sistema prepara o ambiente para o seu co
 * **Gatilho:** Pessoa: `Jonas` | Local: `frente`
 * **Ações:**
   * 🚪 Porta: Destranca e abre.
-    * ❄️ Ar Condicionado: Liga e ajusta para **20°C**.
-    * 💡 Lâmpada: Liga.
-    * 🪟 Cortina: Abre totalmente (100%).
+  * ❄️ Ar Condicionado: Liga e ajusta para **25°C**.
+  * 💡 Lâmpada: Liga.
+  * 🪟 Cortina: Abre totalmente (100%).
 
 ### 2. Saída do Proprietário
 
@@ -48,9 +48,9 @@ Quando o proprietário deixa a residência, o sistema entra em modo de economia 
 * **Gatilho:** Pessoa: `Jonas` | Local: `saida`
 * **Ações:**
   * 🚪 Porta: Fecha e tranca.
-    * ❄️ Ar Condicionado: Desliga.
-    * 💡 Lâmpada: Desliga.
-    * 🪟 Cortina: Fecha totalmente (0%).
+  * ❄️ Ar Condicionado: Desliga.
+  * 💡 Lâmpada: Desliga.
+  * 🪟 Cortina: Fecha totalmente (0%).
 
 ### 3. Modo de Segurança (Intruso)
 
@@ -59,10 +59,10 @@ Se uma pessoa desconhecida é detectada, o sistema ativa o "Modo Pânico" para d
 * **Gatilho:** Pessoa: `[Qualquer nome ≠ Jonas]` | Local: `[Qualquer]`
 * **Ações:**
   * 🚨 Alerta: Mensagem de segurança enviada a todos os agentes (Broadcast).
-    * 🚪 Porta: Fecha e tranca imediatamente.
-    * ❄️ Ar Condicionado: Liga em temperatura extrema (**10°C**) para congelar o ambiente.
-    * 💡 Lâmpada: Apaga (para dificultar a visão).
-    * 🪟 Cortina: Fecha.
+  * 🚪 Porta: Fecha e tranca imediatamente.
+  * ❄️ Ar Condicionado: Liga em temperatura extrema (**0°C**) para congelar o ambiente.
+  * 💡 Lâmpada: Apaga (para dificultar a visão).
+  * 🪟 Cortina: Fecha.
 
 ---
 
@@ -71,30 +71,22 @@ Se uma pessoa desconhecida é detectada, o sistema ativa o "Modo Pânico" para d
 ### Pré-requisitos
 
 * Java JDK 17 ou superior.
-* Gradle (opcional, pois o wrapper está incluso).
+* Gradle.
 
 ### Execução
 
 1. Abra o terminal na raiz do projeto.
 2. Execute o comando do Gradle:
 
-    **Linux/Mac:**
-
     ```bash
     ./gradlew run
-    ```
-
-    **Windows:**
-
-    ```cmd
-    gradlew.bat run
     ```
 
 3. Várias janelas pequenas se abrirão (Câmera, Ar Condicionado, Fechadura, etc.). Organize-as na tela para visualizar a simulação.
 
 ### Como Testar
 
-Utilize a janela da **Camera** para simular os eventos:
+Utilize a janela da **Câmera** para simular os eventos:
 
 1. **Teste de Chegada:**
     * Campo Pessoa: `Jonas` (Respeite a letra maiúscula)
@@ -102,12 +94,12 @@ Utilize a janela da **Camera** para simular os eventos:
     * Clique em **OK**.
 
 2. **Teste de Saída:**
-    * Campo Pessoa: `Jonas`
+    * Campo Pessoa: `Jonas` (Respeite a letra maiúscula)
     * Campo Local: `saida`
     * Clique em **OK**.
 
 3. **Teste de Intruso:**
-    * Campo Pessoa: `Ladrao` (ou qualquer outro nome)
+    * Campo Pessoa: `Ladrao`
     * Campo Local: `sala`
     * Clique em **OK**.
 
@@ -118,7 +110,6 @@ Utilize a janela da **Camera** para simular os eventos:
 O sistema gera logs detalhados no terminal e também salva arquivos de log na pasta `log/`.
 
 * Verifique o console para ver a troca de mensagens entre os agentes (BDI).
-* Verifique as janelas dos artefatos para ver as mudanças de estado físico (ex: temperatura descendo).
 
 ---
 
