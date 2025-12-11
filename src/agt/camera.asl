@@ -9,40 +9,29 @@
 +movimento 
   <-  !!verificar_pessoa.
 
-// --- LÓGICA DOS CENÁRIOS ---
-
-// CENÁRIO 1: Proprietário Chegando (Jonas na "frente")
-+!verificar_pessoa : pessoa_presente("jonas") & local("frente")
+// CENÁRIO 1: Chegada
+// Note o "Jonas" com J maiúsculo para casar com o padrão da interface Java
++!verificar_pessoa : pessoa_presente("Jonas") & local("frente")
    <-  .print("PROPRIETÁRIO CHEGANDO: Iniciando protocolo de boas-vindas.");
-        
-        // Comandar a porta
         .send(fechadura, achieve, destrancar_e_abrir);
-        
-        // Adequar ambiente
         .send(ar_condicionado, achieve, preparar_ambiente);
         .send(cortina, achieve, abrir_totalmente);
         .send(lampada, achieve, acender_luzes).
 
-// CENÁRIO 2: Proprietário Saindo (Jonas na "saida")
-// Nota: Como o artefato é simples, convencionamos que digitar "saida" no local simula a saída
-+!verificar_pessoa : pessoa_presente("jonas") & local("saida")
+// CENÁRIO 2: Saída
++!verificar_pessoa : pessoa_presente("Jonas") & local("saida")
    <-  .print("PROPRIETÁRIO SAINDO: Iniciando protocolo de encerramento.");
-        
-        // Trancar a casa
         .send(fechadura, achieve, fechar_e_trancar);
-        
-        // Desligar aparelhos
         .send(ar_condicionado, achieve, desligar_sistema);
         .send(cortina, achieve, fechar_totalmente);
         .send(lampada, achieve, apagar_luzes).
 
-// CENÁRIO 3: Intruso (Qualquer pessoa que não seja 'jonas' nem 'ninguem')
-+!verificar_pessoa : pessoa_presente(P) & P \== "jonas" & P \== "ninguem"
+// CENÁRIO 3: Intruso
+// O intruso é qualquer um que NÃO seja "Jonas" (e nem "ninguem")
++!verificar_pessoa : pessoa_presente(P) & P \== "Jonas" & P \== "ninguem"
     <-  .print("ALERTA DE SEGURANÇA! Intruso detectado: ", P);
-        
-        // Usamos broadcast para avisar TODOS os agentes de uma vez para entrarem em modo pânico
         .broadcast(achieve, modo_seguranca).
 
-// Caso padrão (ninguém ou situação irrelevante)
+// Caso padrão (ninguém ou input vazio)
 +!verificar_pessoa
-    <- .print("Nenhuma ação necessária no momento.").
+    <- .print("Nenhuma ação necessária.").
