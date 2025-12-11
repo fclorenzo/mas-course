@@ -51,7 +51,6 @@ public class Cortina extends GUIArtifact {
 
     @OPERATION
     void fechar() {
-        System.out.println("Nível de abertura ANTES: " + nivel);
         cortina_model.setNivel_abertura(0);
         getObsProperty("nivel_abertura").updateValue(cortina_model.getNivel_abertura());
         System.out.println("Nível de abertura DEPOIS: 0");
@@ -59,7 +58,6 @@ public class Cortina extends GUIArtifact {
 
     @OPERATION
     void abrir() {
-        System.out.println("Nível de abertura ANTES: " + nivel);
         cortina_model.setNivel_abertura(100);
         getObsProperty("nivel_abertura").updateValue(cortina_model.getNivel_abertura());
         System.out.println("Nível de abertura DEPOIS: 100");
